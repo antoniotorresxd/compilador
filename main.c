@@ -1,26 +1,26 @@
-// ANALIZADOR LEXICO
-
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
 
 #define MAX_TOKEN_LENGTH 100
+#define MAX_FILE_SIZE 1024
 
 // Palabras reservadas
 const char *reserved_words[] = {
     "int", "for", "case", "break", "switch", "const", 
     "float", "char", "if", "else", "do", "while", 
-    "struct", "typedef"
+    "struct", "typedef", "printf", "return0", "return1", 
+    "<stdio.h>", "#include", "main"
 };
 
 // Operadores
 const char *operators[] = {
-    "+", "=", "-", "*", "/", ">", "<", ">=", "<=", "&&", "||"
+    "+", "=", "-", "*", "/", ">", "<", ">=", "<=", "&&", "||", "==",
 };
 
 // Símbolos especiales
 const char *symbols[] = {
-    "(", ")", ":", ";", ".", ","
+    "(", ")", ":", ";", ".", ",", "\'", "\"", "{", "}", "[", "]"
 };
 
 // Función para verificar si una cadena es una palabra reservada
@@ -76,24 +76,52 @@ int is_identifier(const char *token) {
     return 1;
 }
 
-// Función para analizar la cadena
+// Función para analizar la cadena y formatear la salida
 void analyze_string(const char *input) {
     char token[MAX_TOKEN_LENGTH];
     int index = 0;
+    int in_string = 0; // Indicador para cadenas
+
+    // Imprimir el encabezado de la tabla
+    printf("\n%-20s | %-20s\n", "Lexema", "Token");
+    printf("--------------------------------------------\n");
 
     for (int i = 0; input[i] != '\0'; i++) {
+        // Manejar cadenas entre comillas dobles y simples
+        if (input[i] == '"' || input[i] == '\'') {
+            if (in_string) {
+                // Si ya estamos dentro de una cadena, la cerramos
+                token[index++] = input[i];
+                token[index] = '\0';
+                printf("%-20s | %-20s\n", token, "Cadena");
+                in_string = 0;
+                index = 0;
+            } else {
+                // Si encontramos el inicio de una cadena
+                in_string = 1;
+                token[index++] = input[i];
+            }
+            continue;
+        }
+
+        // Si estamos dentro de una cadena, seguimos capturando caracteres
+        if (in_string) {
+            token[index++] = input[i];
+            continue;
+        }
+
         // Si es un espacio, separamos el token
         if (isspace(input[i])) {
             if (index > 0) {
                 token[index] = '\0'; // Terminar el token
                 if (is_reserved(token)) {
-                    printf("'%s' es una palabra reservada.\n", token);
+                    printf("%-20s | %-20s\n", token, "Palabra Reservada");
                 } else if (is_identifier(token)) {
-                    printf("'%s' es un identificador.\n", token);
+                    printf("%-20s | %-20s\n", token, "Identificador");
                 } else if (is_number(token)) {
-                    printf("'%s' es un numero.\n", token);
+                    printf("%-20s | %-20s\n", token, "Numero");
                 } else {
-                    printf("'%s' es un token no válido.\n", token);
+                    printf("%-20s | %-20s\n", token, "Token no valido");
                 }
                 index = 0; // Reiniciar el índice
             }
@@ -101,17 +129,17 @@ void analyze_string(const char *input) {
         }
 
         // Manejo de operadores y símbolos especiales
-        if (strchr("+-*/=><", input[i]) || strchr("();:.,", input[i])) {
+        if (strchr("+-*/=><(){}[]:;.,", input[i])) {
             if (index > 0) {
                 token[index] = '\0';
                 if (is_reserved(token)) {
-                    printf("'%s' es una palabra reservada.\n", token);
+                    printf("%-20s | %-20s\n", token, "Palabra Reservada");
                 } else if (is_identifier(token)) {
-                    printf("'%s' es un identificador.\n", token);
+                    printf("%-20s | %-20s\n", token, "Identificador");
                 } else if (is_number(token)) {
-                    printf("'%s' es un numero.\n", token);
+                    printf("%-20s | %-20s\n", token, "Numero");
                 } else {
-                    printf("'%s' es un token no valido.\n", token);
+                    printf("%-20s | %-20s\n", token, "Token no valido");
                 }
                 index = 0; // Reiniciar el índice
             }
@@ -121,9 +149,9 @@ void analyze_string(const char *input) {
             token[index] = '\0';
 
             if (is_operator(token)) {
-                printf("'%s' es un operador.\n", token);
+                printf("%-20s | %-20s\n", token, "Operador");
             } else if (is_symbol(token)) {
-                printf("'%s' es un simbolo especial.\n", token);
+                printf("%-20s | %-20s\n", token, "Simbolo Especial");
             }
 
             index = 0; // Reiniciar el índice
@@ -138,19 +166,68 @@ void analyze_string(const char *input) {
     if (index > 0) {
         token[index] = '\0';
         if (is_reserved(token)) {
-            printf("'%s' es una palabra reservada.\n", token);
+            printf("%-20s | %-20s\n", token, "Palabra Reservada");
         } else if (is_identifier(token)) {
-            printf("'%s' es un identificador.\n", token);
+            printf("%-20s | %-20s\n", token, "Identificador");
         } else if (is_number(token)) {
-            printf("'%s' es un numero.\n", token);
+            printf("%-20s | %-20s\n", token, "Numero");
         } else {
-            printf("'%s' es un token no valido.\n", token);
+            printf("%-20s | %-20s\n", token, "Token no valido");
         }
     }
 }
 
+void clear_file(char input[MAX_FILE_SIZE]){
+    FILE *archivo;
+    char caracter;
+    int index = 0;
+
+    archivo = fopen("archivo.c","r");
+
+    if (archivo == NULL){
+        printf("\nError de apertura del archivo. \n\n");
+        return;
+    }
+
+    while ((caracter = fgetc(archivo)) != EOF && index < MAX_FILE_SIZE - 1) {
+        if (!isspace(caracter)) { // Ignorar espacios y tabulaciones
+            input[index++] = caracter;
+        }
+    }
+    input[index] = '\0';
+
+    fclose(archivo);
+
+}
+
+
 int main() {
-    char input[256] = "+a/bfor-8+b-+/*int8(;9intento)";
+
+    char input[MAX_FILE_SIZE] = {0};  
+    int opt;
+
+    printf("1.- Analizador con una cadena \n");
+    printf("2.- Analizador con archivo .c \n");
+    printf("3.- Salir \n");
+    printf("Ingresa una opcion: ");
+    
+    scanf("%i", &opt);
+
+    switch (opt){
+
+        case 1:
+            strcpy(input, "+a/for-8+b-+/*int8(intento-9)");
+        break;
+
+        case 2:
+            clear_file(input);
+        break;
+    
+    default:
+        break;
+    }
+    printf("\nCadena: %s\n", input);
+
     analyze_string(input);
     return 0;
 }
