@@ -15,12 +15,14 @@ const char *reserved_words[] = {
 
 // Operadores
 const char *operators[] = {
-    "+", "=", "-", "*", "/", ">", "<", ">=", "<=", "&&", "||", "==",
+    "+", "=", "-", "*", "/", ">", "<", ">=", "<=",
+    "&&", "||", "==",
 };
 
 // Símbolos especiales
 const char *symbols[] = {
-    "(", ")", ":", ";", ".", ",", "\'", "\"", "{", "}", "[", "]"
+    "(", ")", ":", ";", ".", ",", "\'", "\"",
+    "{", "}", "[", "]"
 };
 
 // Función para verificar si una cadena es una palabra reservada
