@@ -29,18 +29,11 @@ Este proyecto implementa un analizador léxico (lexer) y un analizador sintácti
 ├── parser.h       # Declaraciones y tipos para el parser
 ├── parser.c       # Implementación del parser
 ├── main.c         # Archivo principal que ejecuta el lexer y parser
-├── Makefile       # (Opcional) Script para compilar el proyecto
 └── README.md      # Documentación del proyecto
 ```
 
 ## **Cómo compilar el proyecto**
 
-### **Con Makefile**
-Si tienes `make` instalado, simplemente ejecuta:
-
-```bash
-make
-```
 
 Esto generará un ejecutable llamado `analyzer`.
 
@@ -58,8 +51,7 @@ gcc -o analyzer lexer.c parser.c main.c
     #include <stdio.h>
 
     int main() {
-        printf("Hola Mundo
-");
+        printf("Hola Mundo");
         return 0;
     }
     ```
@@ -89,8 +81,7 @@ Token: ), Type: TOKEN_RPAREN
 Token: {, Type: TOKEN_OPERATOR
 Token: printf, Type: TOKEN_IDENTIFIER
 Token: (, Type: TOKEN_LPAREN
-Token: "Hola Mundo
-", Type: TOKEN_STRING
+Token: "Hola Mundo", Type: TOKEN_STRING
 Token: ), Type: TOKEN_RPAREN
 Token: ;, Type: TOKEN_SEMICOLON
 Token: return, Type: TOKEN_KEYWORD
@@ -119,10 +110,4 @@ Además, el parser verificará las declaraciones y bloques y generará mensajes 
 - Añadir soporte para más operadores y estructuras de control.
 - Generar un árbol de sintaxis abstracta (AST) para optimizar el análisis.
 
-## **Contribuciones**
 
-¡Contribuciones son bienvenidas! Por favor, envía un *pull request* o abre un *issue* para discutir mejoras o reportar errores.
-
-## **Licencia**
-
-Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.
