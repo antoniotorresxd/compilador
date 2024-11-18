@@ -1,53 +1,128 @@
-# Analizador Léxico en C
 
-Este proyecto es un analizador léxico simple escrito en C que puede analizar cadenas y archivos de código fuente en C para identificar palabras reservadas, identificadores, números, operadores y símbolos especiales.
+# **C Lexer and Parser**
 
-## Estructura del Código
+Este proyecto implementa un analizador léxico (lexer) y un analizador sintáctico (parser) para un lenguaje de programación estilo C. Permite identificar y clasificar tokens en un archivo de código fuente y analizar su validez sintáctica.
 
-El código se divide en varias secciones:
+## **Características principales**
 
-1. **Definiciones y Bibliotecas**
-   - Se definen constantes como `MAX_TOKEN_LENGTH` y `MAX_FILE_SIZE`, que determinan el tamaño máximo de los tokens y del archivo que se puede analizar.
-   - Se incluyen las bibliotecas necesarias: `stdio.h`, `string.h` y `ctype.h`.
+- **Lexer:**  
+  Extrae tokens de un archivo de entrada y clasifica su tipo (identificadores, palabras clave, operadores, etc.).
+  
+- **Parser:**  
+  Verifica la sintaxis del archivo de código fuente utilizando los tokens generados por el lexer.
 
-2. **Palabras Reservadas y Tokens**
-   - Se definen listas de palabras reservadas, operadores y símbolos especiales que el analizador utilizará para clasificar los tokens en el código.
+- **Soporte para palabras clave y tipos de datos:**  
+  Reconoce palabras clave comunes del lenguaje C como `int`, `float`, `if`, `return`, entre otras.
 
-3. **Funciones de Verificación**
-   - **`is_reserved`**: Verifica si un token es una palabra reservada.
-   - **`is_operator`**: Verifica si un token es un operador.
-   - **`is_symbol`**: Verifica si un token es un símbolo especial.
-   - **`is_number`**: Verifica si un token es un número.
-   - **`is_identifier`**: Verifica si un token es un identificador válido.
+## **Requisitos del sistema**
 
-4. **Función Principal**
-   - **`analyze_string`**: Analiza la cadena de entrada y clasifica cada token. Imprime una tabla con los tokens y su tipo correspondiente (palabra reservada, identificador, número, operador, símbolo especial).
+- Compilador C (compatible con C99 o superior).
+- Sistema operativo: Linux, macOS, o Windows con herramientas de desarrollo configuradas.
+- `Make` (opcional, para compilar el proyecto fácilmente).
 
-5. **Lectura de Archivos**
-   - **`clear_file`**: Lee un archivo de código fuente en C (`archivo.c`), ignorando espacios y tabulaciones, y almacena el contenido en una cadena.
+## **Estructura del proyecto**
 
-6. **Función `main`**
-   - Permite al usuario elegir entre analizar una cadena predefinida o un archivo de código fuente.
-   - Dependiendo de la opción elegida, se llama a `analyze_string` para procesar la cadena o el contenido del archivo.
+```
+.
+├── lexer.h        # Declaraciones y tipos para el lexer
+├── lexer.c        # Implementación del lexer
+├── parser.h       # Declaraciones y tipos para el parser
+├── parser.c       # Implementación del parser
+├── main.c         # Archivo principal que ejecuta el lexer y parser
+├── Makefile       # (Opcional) Script para compilar el proyecto
+└── README.md      # Documentación del proyecto
+```
 
-## Cómo Compilar y Ejecutar
+## **Cómo compilar el proyecto**
 
-1. **Compilación**
-   Usa un compilador de C (como `gcc`) para compilar el código:
+### **Con Makefile**
+Si tienes `make` instalado, simplemente ejecuta:
 
-   ```bash
-   gcc -o analizador analizador.c
+```bash
+make
+```
 
-## Ejemplo de salida**
+Esto generará un ejecutable llamado `analyzer`.
 
-    Cadena: +a/for-8+b-+/*int8(intento-9)
-    Lexema              | Token               
-    --------------------------------------------
-    +                   | Operador           
-    a                   | Identificador             
-    for                 | Palabra Reservada  
+### **Manual**
+Si prefieres compilar manualmente:
 
+```bash
+gcc -o analyzer lexer.c parser.c main.c
+```
 
-### Notas Adicionales
-- Asegúrate de crear un archivo llamado `archivo.c` en el mismo directorio donde se ejecuta tu programa si planeas usar la opción 2 para analizar un archivo.
-- Puedes personalizar el contenido y el estilo según sea necesario para adaptarlo a tu proyecto.
+## **Cómo usarlo**
+
+1. Crea o utiliza un archivo de código fuente en C. Por ejemplo, `archivo.c`:
+    ```c
+    #include <stdio.h>
+
+    int main() {
+        printf("Hola Mundo
+");
+        return 0;
+    }
+    ```
+
+2. Ejecuta el analizador sobre el archivo:
+    ```bash
+    ./analyzer archivo.c
+    ```
+
+3. El programa mostrará los tokens identificados y verificará la validez de las declaraciones y bloques.
+
+## **Ejemplo de salida**
+
+Para el archivo `archivo.c` proporcionado, el programa podría generar una salida como esta:
+
+```
+Token: #include, Type: TOKEN_KEYWORD
+Token: <, Type: TOKEN_OPERATOR
+Token: stdio, Type: TOKEN_IDENTIFIER
+Token: ., Type: TOKEN_OPERATOR
+Token: h, Type: TOKEN_IDENTIFIER
+Token: >, Type: TOKEN_OPERATOR
+Token: int, Type: TOKEN_KEYWORD
+Token: main, Type: TOKEN_IDENTIFIER
+Token: (, Type: TOKEN_LPAREN
+Token: ), Type: TOKEN_RPAREN
+Token: {, Type: TOKEN_OPERATOR
+Token: printf, Type: TOKEN_IDENTIFIER
+Token: (, Type: TOKEN_LPAREN
+Token: "Hola Mundo
+", Type: TOKEN_STRING
+Token: ), Type: TOKEN_RPAREN
+Token: ;, Type: TOKEN_SEMICOLON
+Token: return, Type: TOKEN_KEYWORD
+Token: 0, Type: TOKEN_NUMBER
+Token: ;, Type: TOKEN_SEMICOLON
+Token: }, Type: TOKEN_OPERATOR
+Declaration parsed successfully
+```
+
+Además, el parser verificará las declaraciones y bloques y generará mensajes de error si encuentra problemas.
+
+## **Problemas comunes**
+
+1. **Error: `conflicting types for 'Token'`:**
+   - Asegúrate de que solo se define `Token` en `lexer.h` y que otros archivos simplemente incluyen `lexer.h`.
+
+2. **Error: `invalid initializer`:**
+   - Verifica que la función `get_next_token` devuelve correctamente un objeto de tipo `Token`.
+
+3. **Lexer no reconoce palabras clave personalizadas:**
+   - Añade las palabras clave necesarias en la lista `reserved_words` en `lexer.c`.
+
+## **Mejoras futuras**
+
+- Implementar análisis semántico.
+- Añadir soporte para más operadores y estructuras de control.
+- Generar un árbol de sintaxis abstracta (AST) para optimizar el análisis.
+
+## **Contribuciones**
+
+¡Contribuciones son bienvenidas! Por favor, envía un *pull request* o abre un *issue* para discutir mejoras o reportar errores.
+
+## **Licencia**
+
+Este proyecto está bajo la licencia MIT. Consulta el archivo `LICENSE` para más detalles.

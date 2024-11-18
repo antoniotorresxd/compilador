@@ -9,8 +9,8 @@ typedef enum {
     TOKEN_KEYWORD,
     TOKEN_OPERATOR,
     TOKEN_SEMICOLON,
-    TOKEN_LPAREN,    // Paréntesis izquierdo
-    TOKEN_RPAREN,    // Paréntesis derecho
+    TOKEN_LPAREN,  
+    TOKEN_RPAREN,    
     TOKEN_UNKNOWN,
     TOKEN_STRING,
     TOKEN_DATA_TYPE,
