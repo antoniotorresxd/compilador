@@ -18,7 +18,6 @@ Este proyecto implementa un analizador léxico (lexer) y un analizador sintácti
 
 - Compilador C (compatible con C99 o superior).
 - Sistema operativo: Linux, macOS, o Windows con herramientas de desarrollo configuradas.
-- `Make` (opcional, para compilar el proyecto fácilmente).
 
 ## **Estructura del proyecto**
 
@@ -35,7 +34,7 @@ Este proyecto implementa un analizador léxico (lexer) y un analizador sintácti
 ## **Cómo compilar el proyecto**
 
 
-Esto generará un ejecutable llamado `analyzer`.
+Esto generará un ejecutable llamado `parser.exe`.
 
 ### **Manual**
 Si prefieres compilar manualmente:
@@ -58,7 +57,7 @@ gcc -o analyzer lexer.c parser.c main.c
 
 2. Ejecuta el analizador sobre el archivo:
     ```bash
-    ./analyzer archivo.c
+    ./parser.exe
     ```
 
 3. El programa mostrará los tokens identificados y verificará la validez de las declaraciones y bloques.
