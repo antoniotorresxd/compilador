@@ -33,9 +33,6 @@ Este proyecto implementa un analizador léxico (lexer) y un analizador sintácti
 
 ## **Cómo compilar el proyecto**
 
-
-Esto generará un ejecutable llamado `parser.exe`.
-
 ### **Manual**
 Si prefieres compilar manualmente:
 

@@ -15,6 +15,8 @@ typedef enum {
     TOKEN_STRING,
     TOKEN_DATA_TYPE,
     TOKEN_ASSIGN,
+    TOKEN_LBRACE,
+    TOKEN_RBRACE,
 } TokenType;
 
 // Estructura de un token

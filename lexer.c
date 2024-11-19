@@ -81,16 +81,39 @@ Token get_next_token(FILE *file) {
         }
         token.value[i] = '\0';
         ungetc(c, file);
-
-        // Verificamos si es una palabra clave
+        
         if (is_keyword(token.value)) {
             token.type = TOKEN_KEYWORD;
+        } else {
+            for (int j = 0; j < NUM_RESERVED_WORDS; j++) {
+                if (strncmp(token.value, reserved_words[j], strlen(reserved_words[j])) == 0) {
+                    if (strlen(token.value) > strlen(reserved_words[j])) {
+                        printf("Error: '%s' no es una funcion valida.\n", token.value);
+                        token.type = TOKEN_UNKNOWN; 
+                        break; 
+                    }
+                }
+            }
         }
         return token;
     }
 
     if (is_operator(c)) {
         token.type = TOKEN_OPERATOR;
+        token.value[i++] = c;
+        token.value[i] = '\0';
+        return token;
+    }
+
+    if (c == '{') {
+        token.type = TOKEN_LBRACE;  // Bloque de inicio
+        token.value[i++] = c;
+        token.value[i] = '\0';
+        return token;
+    }
+
+    if (c == '}') {
+        token.type = TOKEN_RBRACE; // Bloque de fin
         token.value[i++] = c;
         token.value[i] = '\0';
         return token;
