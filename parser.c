@@ -80,6 +80,6 @@ int parse_declaration(Parser *parser) {
     }
 
     return 0;  // Error en el parseo
-} // PARCER.H
+} // PARCER.C
 
 

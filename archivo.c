@@ -4,7 +4,7 @@ main() {
     printf("Hola Mundo\n");
 
     if(1){
-        printf("Valido");
+        printfc("Valido");
     }
     return 0;
 }
